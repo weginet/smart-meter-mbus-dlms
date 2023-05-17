@@ -10,7 +10,15 @@ export class ApplicationDataDecrypter {
 		//console.log('applicationDataUnit.apduBuffer hex', applicationDataUnit.apduBuffer.toString('hex'))
 		//console.log('applicationDataUnit.encryptedPayload hex', applicationDataUnit.encryptedPayload.toString('hex'))
 
-		const key = Buffer.from(DecryptionSettings.key, 'hex');
+		let key: Buffer;
+		const id = applicationDataUnit['_systemTitleText'];
+		if (id in DecryptionSettings.keys) {
+			key = Buffer.from(<string>(DecryptionSettings.keys.get(id)), 'hex') 
+		} else {
+			key = Buffer.from(DecryptionSettings.key, 'hex');
+		}
+		//console.log('key', key);
+
 		const iv = Buffer.concat([applicationDataUnit.systemTitle, applicationDataUnit.frameCounter]);
 
 		// The documentation says that the smart meter uses 'aes-128-gcm'. But it seems to be without authTag.

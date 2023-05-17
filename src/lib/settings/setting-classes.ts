@@ -19,9 +19,11 @@ export class SerialPortSettings {
 
 export class DecryptionSettings {
 	public static key: string = '';
+	public static keys = new Map<string, string>();
 
 	public static read() {
 		DecryptionSettings.key = config.get('decryption.key');
+		DecryptionSettings.keys = config.get('decryption.keys');
 	}
 }
 
